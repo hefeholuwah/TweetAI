@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000", // Replace with your actual server URL
+        url: "https://tweetai.onrender.com", // Replace with your actual server URL
       },
     ],
   },
