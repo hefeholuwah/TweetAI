@@ -181,7 +181,9 @@ app.get("/api/post/:id/comments", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+  console.log(
+    `Swagger docs available at https://tweetai.onrender.com/api-docs`
+  );
 });
 
 const job = new cron.CronJob("0 * * * *", async () => {
