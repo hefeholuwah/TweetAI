@@ -5,9 +5,19 @@ const rateLimit = require("rate-limiter-flexible");
 const cron = require("cron");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const corsOptions = {
+  origin:
+    "https://tweet-ai-counter-3ed3z6l7u-hefeholuwahs-projects.vercel.app/", // Replace with your frontend's URL
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"],
+};
+
+app.use(cors(corsOptions));
 
 // Rate Limiter
 const rateLimiter = new rateLimit.RateLimiterMemory({
