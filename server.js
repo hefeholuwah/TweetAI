@@ -11,8 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
-  origin:
-    "https://tweet-ai-counter-3ed3z6l7u-hefeholuwahs-projects.vercel.app/", // Replace with your frontend's URL
+  origin: "https://tweet-ai-counter-3ed3z6l7u-hefeholuwahs-projects.vercel.app", // Replace with your frontend's URL
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 };
