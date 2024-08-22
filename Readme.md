@@ -1,6 +1,3 @@
-Here is your `README.md` file in markdown format:
-
-````markdown
 # Autobots API
 
 This project is a backend service that generates and manages Autobots. It automatically creates 500 unique Autobots every hour, with each Autobot having 10 posts and each post having 10 comments. The service also provides API endpoints for retrieving Autobots, their posts, and comments, with rate limiting and pagination support.
@@ -16,7 +13,6 @@ This project is a backend service that generates and manages Autobots. It automa
 - [Rate Limiting](#rate-limiting)
 - [Database Setup](#database-setup)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -41,6 +37,7 @@ This project is a backend service that generates and manages Autobots. It automa
    git clone https://github.com/yourusername/autobots-api.git
    cd autobots-api
    ```
+
 ````
 
 2. **Install dependencies**:
@@ -133,15 +130,5 @@ Contributions are welcome! Please follow these steps to contribute:
 4. Push to the branch (`git push origin feature/your-feature-name`).
 5. Open a Pull Request.
 
-Please ensure your code follows the project's coding standards and passes all tests.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ```
-
----
-
-You can use this content directly as your `README.md` file in your project. It provides a comprehensive overview of the project, setup instructions, and usage details.
-```
+````
