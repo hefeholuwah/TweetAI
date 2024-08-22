@@ -179,6 +179,38 @@ app.get("/api/post/:id/comments", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/autobots/count:
+ *   get:
+ *     summary: Get the total count of Autobots
+ *     description: Retrieve the total number of Autobots in the database.
+ *     responses:
+ *       200:
+ *         description: A count of Autobots
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 count:
+ *                   type: integer
+ *                   description: The total number of Autobots
+ *                   example: 5000
+ */
+app.get("/api/autobots/count", async (req, res) => {
+  try {
+    const [result] = await pool.execute(
+      "SELECT COUNT(*) AS count FROM Autobots"
+    );
+    const count = result[0].count;
+    res.json({ count });
+  } catch (err) {
+    console.error("Error retrieving Autobot count:", err);
+    res.status(500).json({ error: "Failed to retrieve Autobot count" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(
