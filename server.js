@@ -249,7 +249,8 @@ app.listen(PORT, () => {
 
 const job = new cron.CronJob("0 * * * *", async () => {
   try {
-    for (let i = 0; i < 500; i++) {
+    const fetchLimit = 500; // Fetch and insert only 100 records at a time to reduce load
+    for (let i = 0; i < fetchLimit; i++) {
       const { data: autobots } = await axios.get(
         "https://jsonplaceholder.typicode.com/users"
       );
@@ -260,31 +261,63 @@ const job = new cron.CronJob("0 * * * *", async () => {
         "https://jsonplaceholder.typicode.com/comments"
       );
 
-      const [autobotResult] = await pool.query(
-        "INSERT INTO Autobots (name, username, email) VALUES (?, ?, ?)",
-        [autobots[i].name, autobots[i].username, autobots[i].email]
+      // Check if Autobot already exists to prevent duplicate data
+      const [existingAutobot] = await pool.query(
+        "SELECT id FROM Autobots WHERE email = ?",
+        [autobots[i].email]
       );
 
+      let autobotId;
+      if (existingAutobot.length > 0) {
+        autobotId = existingAutobot[0].id; // Use the existing Autobot ID
+      } else {
+        const [autobotResult] = await pool.query(
+          "INSERT INTO Autobots (name, username, email) VALUES (?, ?, ?)",
+          [autobots[i].name, autobots[i].username, autobots[i].email]
+        );
+        autobotId = autobotResult.insertId;
+      }
+
       for (let j = 0; j < 10; j++) {
-        const [postResult] = await pool.query(
-          "INSERT INTO Posts (autobot_id, title, body) VALUES (?, ?, ?)",
-          [
-            autobotResult.insertId,
-            `${posts[i * 10 + j].title}-${Date.now()}`,
-            posts[i * 10 + j].body,
-          ]
+        const postTitle = `${posts[i * 10 + j].title}-${Date.now()}`;
+
+        // Check if Post already exists to prevent duplicate data
+        const [existingPost] = await pool.query(
+          "SELECT id FROM Posts WHERE autobot_id = ? AND title = ?",
+          [autobotId, postTitle]
         );
 
-        for (let k = 0; k < 10; k++) {
-          await pool.query(
-            "INSERT INTO Comments (post_id, name, email, body) VALUES (?, ?, ?, ?)",
-            [
-              postResult.insertId,
-              comments[j * 10 + k].name,
-              comments[j * 10 + k].email,
-              comments[j * 10 + k].body,
-            ]
+        let postId;
+        if (existingPost.length > 0) {
+          postId = existingPost[0].id; // Use the existing Post ID
+        } else {
+          const [postResult] = await pool.query(
+            "INSERT INTO Posts (autobot_id, title, body) VALUES (?, ?, ?)",
+            [autobotId, postTitle, posts[i * 10 + j].body]
           );
+          postId = postResult.insertId;
+        }
+
+        for (let k = 0; k < 10; k++) {
+          const commentBody = comments[j * 10 + k].body;
+
+          // Check if Comment already exists to prevent duplicate data
+          const [existingComment] = await pool.query(
+            "SELECT id FROM Comments WHERE post_id = ? AND body = ?",
+            [postId, commentBody]
+          );
+
+          if (existingComment.length === 0) {
+            await pool.query(
+              "INSERT INTO Comments (post_id, name, email, body) VALUES (?, ?, ?, ?)",
+              [
+                postId,
+                comments[j * 10 + k].name,
+                comments[j * 10 + k].email,
+                commentBody,
+              ]
+            );
+          }
         }
       }
     }
