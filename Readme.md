@@ -2,6 +2,8 @@
 
 This project is a backend service that generates and manages Autobots. It automatically creates 500 unique Autobots every hour, with each Autobot having 10 posts and each post having 10 comments. The service also provides API endpoints for retrieving Autobots, their posts, and comments, with rate limiting and pagination support.
 
+**Live Url** : https://tweetai.onrender.com/api-docs/
+
 ## Table of Contents
 
 - [Features](#features)
