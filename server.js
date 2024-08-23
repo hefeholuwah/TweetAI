@@ -124,7 +124,7 @@ app.get("/api/autobots", async (req, res) => {
  *                     type: integer
  *                     description: The post ID
  *                     example: 101
- *                   autobot_id:
+ *                   userId:
  *                     type: integer
  *                     description: The ID of the Autobot who created the post
  *                     example: 1
